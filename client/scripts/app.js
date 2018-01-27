@@ -6,95 +6,8 @@
 //   text: "text",
 //   roomname: "roomname"
 // }
-// var userName = window.location.search.split("name=")[1];
-
-// var friendList = {};
-
-// var app = {
-//   server: "http://parse.hrr.hackreactor.com/chatterbox/classes/messages?order=-createdAt",
-//   init: function(){
-//     $('#send').on('click', function(event) {
-//       var message = {
-//         username: userName,
-//         text: $('#message').val(),
-//         roomname: $('#roomSelect').val()
-//       };
-//       $('#message').val('');
-//       app.handleSubmit(message);
-//       event.preventDefault();
-//     });
-//     $('.username').on('click', function(event) {
-//       console.log("clicked on username");
-//       var user = $(this).text();
-//       console.log(user);
-//       app.handleUsernameClick(user);
-//       app.fetch();
-//       event.preventDefault();
-//     });
-
-//     setInterval(app.fetch, 2000);
-
-//   },
-//   clearMessages: function(){
-//     $("#chats").remove();
-//     $("#main").append("<div id='chats'></div>");
-//   },
-//   fetch: function(){
-//     $.ajax({
-//       url: app.server,
-//       type: "GET",
-//       dataType: "JSON",
-//       success: function(data) {
-//         app.clearMessages();
-//         data.results.forEach( result => app.renderMessage(result) );
-//       }
-//     });
-//   },
-//   send: function(message) {
-//     $.ajax ({
-//       url: "http://parse.hrr.hackreactor.com/chatterbox/classes/messages",
-//       type: 'POST',
-//       data: JSON.stringify(message),
-//       contentType: 'application/json',
-//       success: function(data) {
-//         console.log('sent');
-//         console.log(message);
-//         console.log(data);
-//       },
-//       error: function() {
-//         console.log('error');
-//       }
-//     });
-//   },
-//   renderRoom: function(roomname) {
-//     var room = $('<option value="' + roomname + '">' + roomname + '</option>');
-//     $("#roomSelect").append(room);
-//   },
-//   renderMessage: function(message) {
-//     var container = $("<div class='chat'></div>");
-//     var user = $("<div class='username'>" + _.escape(message.username) + ": </div>");
-//     var text = $("<div class='message'>" + _.escape(message.text) + "</div>");
-//     if (friendList[message.username]) {
-//       text = $("<div class='message'><b>" + _.escape(message.text) + "</b></div>");
-//     }
-//     container.append(user);
-//     container.append(text);
-//     $("#chats").append(container);
-//   },
-//   handleUsernameClick: function(user) {
-//     if (!friendList[user]) {
-//       friendList[user] = true;
-//     } else {
-//       friendList[user] = !friendList[user];
-//     }
-//   },
-//   handleSubmit: function(message){
-//     app.send(message);
-//   }
-// };
-
-
 $(document).ready(function() {
+
   var userName = window.location.search.split("name=")[1];
   var currentRoom = $('#roomSelect').val();
 
@@ -129,13 +42,13 @@ $(document).ready(function() {
         $('#roomSelect').append(newRoom);
         $('#roomSelect').val(newRoomName);
         currentRoom = newRoom.val();
-      })
+      });
 
       $('#roomSelect').change(function(event) {
         event.preventDefault();
         currentRoom = $('#roomSelect').val();
         app.fetch();
-      })
+      });
 
       setInterval(function() { app.fetch() }, 1000);
 
@@ -200,7 +113,5 @@ $(document).ready(function() {
       app.send(message);
     }
   };
-
-
   app.init();
 });
