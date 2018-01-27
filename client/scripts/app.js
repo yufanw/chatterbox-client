@@ -96,6 +96,7 @@
 
 $(document).ready(function() {
   var userName = window.location.search.split("name=")[1];
+  var currentRoom = $('#roomSelect').val();
 
   var friendList = {};
 
@@ -106,7 +107,7 @@ $(document).ready(function() {
         var message = {
           username: userName,
           text: $('#message').val(),
-          roomname: $('#roomSelect').val()
+          roomname: currentRoom
         };
         $('#message').val('');
         app.handleSubmit(message);
@@ -118,6 +119,23 @@ $(document).ready(function() {
         app.fetch();
         event.preventDefault();
       });
+
+      $('#create').find('.createroom').on('click', function(event) {
+        event.preventDefault();
+        var newRoomName = $('.roomname').val();
+        $('.roomname').val('');
+        var newRoom = $('<option value="' + newRoomName + '">' +
+              newRoomName + '</option>');
+        $('#roomSelect').append(newRoom);
+        $('#roomSelect').val(newRoomName);
+        currentRoom = newRoom.val();
+      })
+
+      $('#roomSelect').change(function(event) {
+        event.preventDefault();
+        currentRoom = $('#roomSelect').val();
+        app.fetch();
+      })
 
       setInterval(function() { app.fetch() }, 1000);
 
@@ -157,15 +175,19 @@ $(document).ready(function() {
       $("#roomSelect").append(room);
     },
     renderMessage: function(message) {
-      var container = $("<div class='chat'></div>");
-      var user = $("<div class='username'>" + _.escape(message.username) + ": </div>");
-      var text = $("<div class='message'>" + _.escape(message.text) + "</div>");
-      if (friendList[message.username]) {
-        text = $("<div class='message'><b>" + _.escape(message.text) + "</b></div>");
+      if (message.roomname === currentRoom) {
+        if (message.username !== null && message.text !== null) {
+          var container = $("<div class='chat'></div>");
+          var user = $("<div class='username'>" + _.escape(message.username) + ": </div>");
+          var text = $("<div class='message'>" + _.escape(message.text) + "</div>");
+          if (friendList[message.username]) {
+            text = $("<div class='message'><b>" + _.escape(message.text) + "</b></div>");
+          }
+          container.append(user);
+          container.append(text);
+          $("#chats").append(container);
+        }
       }
-      container.append(user);
-      container.append(text);
-      $("#chats").append(container);
     },
     handleUsernameClick: function(user) {
       if (!friendList[user]) {

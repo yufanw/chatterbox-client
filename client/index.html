@@ -32,12 +32,15 @@
         <select id="roomSelect">
           <option value="lobby">lobby</option>
         </select>
-        <input type="submit" class="createroom" value="Create Room">
+        <form id='create'>
+          <input type='text' class='roomname' placeholder='Enter a new room name'>
+          <button type="submit" class="createroom">Create Room</button>
+        </form>
       </div>
       <div>
         <form id='messageForm'>
           <textarea id="message" type="text"></textarea>
-          <button id="send" type="submit" class="submit" value="Send">Send</button>
+          <button id="send" type="submit" class="submit">Send</button>
         </form>
       </div>
       <div id="chats"></div>
